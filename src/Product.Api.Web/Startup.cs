@@ -1,8 +1,10 @@
+using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Web.Shared;
 
 namespace Product.Api.Web
 {
@@ -19,6 +21,13 @@ namespace Product.Api.Web
         {
             services.AddControllers();
             services.AddHealthChecks();
+            services.AddHostedService<TransactionNotificationService>();
+            services.Configure<RabbitMqOptions>("Transaction",
+                options => RabbitMqOptions.Parse(Configuration.GetConnectionString("TransactionRabbitMqConnection"), options));
+            services.Configure<RabbitMqOptions>("CancellationTask",
+                options => RabbitMqOptions.Parse(Configuration.GetConnectionString("CancellationTaskRabbitMqConnection"), options));
+            services.AddSingleton<CancellationTaskRabbitMqMessageSender>();
+            services.AddSingleton<TransactionRabbitMqMessageSender>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -32,8 +41,11 @@ namespace Product.Api.Web
 
             app.UseAuthorization();
 
-            app.UseEndpoints(builder => builder.MapHealthChecks("/_health"));
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/_health");
+                endpoints.MapControllers();
+            });
         }
     }
 }

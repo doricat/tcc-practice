@@ -83,7 +83,7 @@ namespace AutoCancellation.Service
 
             try
             {
-                var item = JsonSerializer.Deserialize<Link>(message /*, new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase}*/);
+                var item = JsonSerializer.Deserialize<Link>(message, new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
                 var client = HttpClientFactory.CreateClient();
                 var resp = await client.DeleteAsync(item.Uri);
                 if (resp.IsSuccessStatusCode)

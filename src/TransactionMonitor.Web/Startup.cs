@@ -1,3 +1,4 @@
+using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,7 @@ namespace TransactionMonitor.Web
             services.AddHealthChecks();
             services.AddSignalR();
             services.AddHostedService<NotificationService>();
+            services.Configure<RabbitMqOptions>(options => RabbitMqOptions.Parse(Configuration.GetConnectionString("RabbitMqConnection"), options));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

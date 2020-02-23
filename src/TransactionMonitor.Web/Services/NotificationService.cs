@@ -77,7 +77,11 @@ namespace TransactionMonitor.Web.Services
 
             try
             {
-                await HubContext.Clients.All.ReceiveMessage(new TransactionViewModel()); // TODO
+                var model = JsonSerializer.Deserialize<TransactionViewModel>(message, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
+                await HubContext.Clients.All.ReceiveMessage(model);
             }
             catch (JsonException e)
             {

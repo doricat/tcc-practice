@@ -33,8 +33,11 @@ namespace Coordinator.Api.Web
 
             app.UseAuthorization();
 
-            app.UseEndpoints(builder => builder.MapHealthChecks("/_health"));
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/_health");
+                endpoints.MapControllers();
+            });
         }
     }
 }
