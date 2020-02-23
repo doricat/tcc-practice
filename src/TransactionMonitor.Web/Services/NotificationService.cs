@@ -46,7 +46,6 @@ namespace TransactionMonitor.Web.Services
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
 
-
             _channel.QueueDeclare(queue: options.Queue,
                 durable: true,
                 exclusive: false,

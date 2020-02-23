@@ -8,30 +8,34 @@ const Home = () => {
 
     useEffect(() => {
         let connection = new signalR.HubConnectionBuilder()
-            .withUrl("/transaction_hub")
+            .withUrl("/api/transaction_hub")
             .configureLogging(signalR.LogLevel.Information)
             .build();
-
-        connection.start().then(() => {
-            setState({ tip: undefined, ...state });
-        });
 
         connection.on("ReceiveMessage", args => {
             var index = state.items.findIndex(x => x.sid === args.sid);
             if (index !== -1) {
                 state.items[index].state = args.state;
-                setState({ items: [...state], ...state });
+                const nextState = { tip: undefined, items: state.items };
+                setState(nextState);
             }
             else {
-                setState({ items: [args, ...state], ...state });
+                state.items.unshift(args);
+                const nextState = { tip: undefined, items: state.items };
+                setState(nextState);
             }
+        });
+
+        connection.start().then(() => {
+            const nextState = { tip: undefined, items: state.items };
+            setState(nextState);
         });
 
         return () => connection.stop();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const tip = state.tip
+    const tip = state.tip !== undefined
         ? (<div className="alert alert-primary" role="alert">
             {state.tip}
         </div>)
