@@ -4,6 +4,6 @@ namespace TransactionMonitor.Web.Hubs.Transaction
 {
     public interface ITransactionsClient
     {
-        Task ReceiveMessageAsync(TransactionViewModel message);
+        Task ReceiveMessage(TransactionViewModel message);
     }
 }

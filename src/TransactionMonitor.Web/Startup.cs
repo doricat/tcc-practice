@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TransactionMonitor.Web.Hubs.Transaction;
+using TransactionMonitor.Web.Services;
 
 namespace TransactionMonitor.Web
 {
@@ -21,6 +22,7 @@ namespace TransactionMonitor.Web
             services.AddControllers();
             services.AddHealthChecks();
             services.AddSignalR();
+            services.AddHostedService<NotificationService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -34,10 +36,12 @@ namespace TransactionMonitor.Web
 
             app.UseAuthorization();
 
-            app.UseEndpoints(builder => builder.MapHealthChecks("/_health"));
-
-            app.UseEndpoints(builder => builder.MapHub<TransactionHub>("/transaction_hub"));
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/_health");
+                endpoints.MapHub<TransactionHub>("/transaction_hub");
+                endpoints.MapControllers();
+            });
         }
     }
 }

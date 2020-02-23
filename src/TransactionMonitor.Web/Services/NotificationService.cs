@@ -78,7 +78,7 @@ namespace TransactionMonitor.Web.Services
 
             try
             {
-                await HubContext.Clients.All.ReceiveMessageAsync(new TransactionViewModel()); // TODO
+                await HubContext.Clients.All.ReceiveMessage(new TransactionViewModel()); // TODO
             }
             catch (JsonException e)
             {
