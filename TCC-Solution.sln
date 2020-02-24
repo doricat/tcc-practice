@@ -27,7 +27,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionMonitor.Web", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coordinator.Api.Web", "src\Coordinator.Api.Web\Coordinator.Api.Web.csproj", "{EC9D0193-ED9D-4688-8C7D-F597DD242F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoCancellation.Service", "src\AutoCancellation.Service\AutoCancellation.Service.csproj", "{16D31B71-0445-4AC0-8CC8-39789E6E4B20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCancellation.Service", "src\AutoCancellation.Service\AutoCancellation.Service.csproj", "{16D31B71-0445-4AC0-8CC8-39789E6E4B20}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8B14D0B-B18B-472B-81F1-790D19F5974F}"
+	ProjectSection(SolutionItems) = preProject
+		order.sql = order.sql
+		payment.sql = payment.sql
+		product.sql = product.sql
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetShop.Web", "src\PetShop.Web\PetShop.Web.csproj", "{6AE7B1A7-E95D-4C3B-99CB-07EBD45CF19D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +88,10 @@ Global
 		{16D31B71-0445-4AC0-8CC8-39789E6E4B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16D31B71-0445-4AC0-8CC8-39789E6E4B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16D31B71-0445-4AC0-8CC8-39789E6E4B20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AE7B1A7-E95D-4C3B-99CB-07EBD45CF19D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AE7B1A7-E95D-4C3B-99CB-07EBD45CF19D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AE7B1A7-E95D-4C3B-99CB-07EBD45CF19D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AE7B1A7-E95D-4C3B-99CB-07EBD45CF19D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +108,7 @@ Global
 		{656A6324-C434-4030-8460-793E56F70E94} = {78F1F079-F66E-4615-89A0-873C6CC5873D}
 		{EC9D0193-ED9D-4688-8C7D-F597DD242F05} = {78F1F079-F66E-4615-89A0-873C6CC5873D}
 		{16D31B71-0445-4AC0-8CC8-39789E6E4B20} = {78F1F079-F66E-4615-89A0-873C6CC5873D}
+		{6AE7B1A7-E95D-4C3B-99CB-07EBD45CF19D} = {78F1F079-F66E-4615-89A0-873C6CC5873D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {352A2E1F-1BF8-4E94-B4F3-B49612DB01F7}
