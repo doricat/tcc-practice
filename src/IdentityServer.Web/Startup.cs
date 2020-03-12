@@ -1,5 +1,7 @@
 using IdentityServer.Web.Data;
 using IdentityServer4.Configuration;
+using IdentityServer4.Services;
+using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -64,6 +66,9 @@ namespace IdentityServer.Web
                 //configure your other properties
                 opt.LoginPath = "/Account/Login";
             });
+
+            services.AddTransient<IRedirectUriValidator, DemoRedirectValidator>();
+            services.AddTransient<ICorsPolicyService, DemoCorsPolicy>();
 
             services.AddAuthentication();
             services.AddRazorPages();

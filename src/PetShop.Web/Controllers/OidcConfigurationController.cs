@@ -1,26 +1,21 @@
-﻿using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace PetShop.Web.Controllers
 {
     public class OidcConfigurationController : Controller
     {
-        private readonly ILogger<OidcConfigurationController> _logger;
+        private readonly IOptionsMonitor<OidcOptions> _optionsMonitor;
 
-        public OidcConfigurationController(IClientRequestParametersProvider clientRequestParametersProvider, 
-            ILogger<OidcConfigurationController> logger)
+        public OidcConfigurationController(IOptionsMonitor<OidcOptions> optionsMonitor)
         {
-            ClientRequestParametersProvider = clientRequestParametersProvider;
-            _logger = logger;
+            _optionsMonitor = optionsMonitor;
         }
 
-        public IClientRequestParametersProvider ClientRequestParametersProvider { get; }
-
-        [HttpGet("_configuration/{clientId}")]
-        public IActionResult GetClientRequestParameters([FromRoute]string clientId)
+        [HttpGet("_configuration")]
+        public IActionResult GetClientRequestParameters()
         {
-            var parameters = ClientRequestParametersProvider.GetClientParameters(HttpContext, clientId);
+            var parameters = _optionsMonitor.CurrentValue;
             return Ok(parameters);
         }
     }

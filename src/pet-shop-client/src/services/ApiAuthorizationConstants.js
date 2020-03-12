@@ -1,4 +1,4 @@
-export const ApplicationName = 'PetShop';
+export const ApplicationName = 'PetShop.Spa';
 
 export const QueryParameterNames = {
     ReturnUrl: 'returnUrl',
@@ -23,7 +23,7 @@ const prefix = '/authentication';
 
 export const ApplicationPaths = {
     DefaultLoginRedirectPath: '/',
-    ApiAuthorizationClientConfigurationUrl: `/_configuration/${ApplicationName}`,
+    ApiAuthorizationClientConfigurationUrl: `/_configuration`,
     ApiAuthorizationPrefix: prefix,
     Login: `${prefix}/${LoginActions.Login}`,
     LoginFailed: `${prefix}/${LoginActions.LoginFailed}`,
@@ -33,6 +33,6 @@ export const ApplicationPaths = {
     LogOut: `${prefix}/${LogoutActions.Logout}`,
     LoggedOut: `${prefix}/${LogoutActions.LoggedOut}`,
     LogOutCallback: `${prefix}/${LogoutActions.LogoutCallback}`,
-    IdentityRegisterPath: '/Identity/Account/Register',
-    IdentityManagePath: '/Identity/Account/Manage'
+    IdentityRegisterPath: '/Account/Register',
+    IdentityManagePath: '/Account/Manage'
 };

@@ -1,13 +1,12 @@
-using Microsoft.AspNetCore.Authentication;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PetShop.Web.Data;
-using PetShop.Web.Models;
 
 namespace PetShop.Web
 {
@@ -22,27 +21,39 @@ namespace PetShop.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<User, Role>(options =>
-                {
-                    options.SignIn.RequireConfirmedAccount = true;
-                    options.SignIn.RequireConfirmedEmail = false;
-                })
-                .AddDefaultUI()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddIdentityServer().AddApiAuthorization<User, ApplicationDbContext>();
-
-            services.AddAuthentication().AddIdentityServerJwt();
-
             services.AddControllersWithViews();
-            services.AddRazorPages();
-
             services.AddHealthChecks();
             services.AddHttpClient();
+
+            services.Configure<OidcOptions>(options => Configuration.GetSection("OidcOptions").Bind(options));
+
+            var apiOptions = new OidcApiOptions();
+            Configuration.GetSection("OidcApiOptions").Bind(apiOptions);
+            services.AddAuthentication("token")
+                .AddIdentityServerAuthentication("token", options =>
+                {
+                    options.Authority = apiOptions.Authority;
+                    options.RequireHttpsMetadata = false;
+
+                    options.ApiName = apiOptions.ApiName;
+                    options.ApiSecret = apiOptions.Secret;
+
+                    options.JwtBearerEvents = new JwtBearerEvents
+                    {
+                        OnTokenValidated = e =>
+                        {
+                            var jwt = (JwtSecurityToken) e.SecurityToken;
+                            var type = jwt.Header.Typ;
+
+                            if (!string.Equals(type, "at+jwt", StringComparison.Ordinal))
+                            {
+                                e.Fail("JWT is not an access token");
+                            }
+
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -50,28 +61,29 @@ namespace PetShop.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthentication();
-            app.UseIdentityServer();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/_health");
-                endpoints.MapControllers();
-                endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            if (env.IsStaging())
+            {
+                app.UseSpa(spa => { spa.UseProxyToSpaDevelopmentServer("http://localhost:3001"); });
+            }
         }
     }
 }
