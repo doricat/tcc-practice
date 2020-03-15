@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using Web.Shared;
 
 namespace PetShop.Web
@@ -68,6 +69,7 @@ namespace PetShop.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseSerilogRequestLogging();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();

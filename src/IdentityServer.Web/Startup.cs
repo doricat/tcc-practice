@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace IdentityServer.Web
 {
@@ -88,6 +89,7 @@ namespace IdentityServer.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseSerilogRequestLogging();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseIdentityServer();

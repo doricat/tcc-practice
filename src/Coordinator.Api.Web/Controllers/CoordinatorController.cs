@@ -35,10 +35,8 @@ namespace Coordinator.Api.Web.Controllers
 
             Task.WaitAll(tasks, HttpContext.RequestAborted);
 
-            var b = tasks.Cast<Task<HttpResponseMessage>>().Any(x => !x.Result.IsSuccessStatusCode);
+            var b = tasks.Cast<Task<HttpResponseMessage>>().Any(x => !x.Result.IsSuccessStatusCode); // TODO 这里可能出现不一致情况
             return b ? Task.FromResult<IActionResult>(NotFound()) : Task.FromResult<IActionResult>(NoContent());
-
-            // TODO 强制取消机制
         }
 
         [HttpPut("cancel")]

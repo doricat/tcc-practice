@@ -1,5 +1,10 @@
+using System;
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Debugging;
 
 namespace IdentityServer.Web
 {
@@ -7,6 +12,19 @@ namespace IdentityServer.Web
     {
         public static void Main(string[] args)
         {
+            SelfLog.Enable(Console.Error);
+
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true, true)
+                .AddUserSecrets(typeof(Program).Assembly)
+                .AddEnvironmentVariables()
+                .Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -15,6 +33,7 @@ namespace IdentityServer.Web
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+                .UseSerilog();
     }
 }
