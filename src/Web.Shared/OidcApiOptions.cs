@@ -1,4 +1,4 @@
-﻿namespace PetShop.Web
+﻿namespace Web.Shared
 {
     public class OidcApiOptions
     {
