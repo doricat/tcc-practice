@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Order.Api.Web.Controllers.Order
+namespace Order.Api.Web.Controllers
 {
     [ApiController]
     [Route("orders")]
@@ -13,5 +13,7 @@ namespace Order.Api.Web.Controllers.Order
         }
 
         public ILogger<OrdersController> Logger { get; }
+
+
     }
 }

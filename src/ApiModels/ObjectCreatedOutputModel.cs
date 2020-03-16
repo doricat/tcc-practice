@@ -1,12 +1,12 @@
 ﻿namespace ApiModels
 {
-    public class ObjectCreationOutputModel<TKey>
+    public class ObjectCreatedOutputModel<TKey>
     {
-        public ObjectCreationOutputModel()
+        public ObjectCreatedOutputModel()
         {
         }
 
-        public ObjectCreationOutputModel(TKey id, string location)
+        public ObjectCreatedOutputModel(TKey id, string location)
         {
             Id = id;
             Location = location;
