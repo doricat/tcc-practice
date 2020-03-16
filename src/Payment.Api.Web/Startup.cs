@@ -29,6 +29,9 @@ namespace Payment.Api.Web
                 options => RabbitMqOptions.Parse(Configuration.GetConnectionString("CancellationTaskRabbitMqConnection"), options));
             services.AddSingleton<CancellationTaskRabbitMqMessageSender>();
             services.AddSingleton<TransactionRabbitMqMessageSender>();
+
+            services.AddSingleton(provider => new IdentityGeneratorOptions { InstanceTag = 1 });
+            services.AddSingleton<IdentityGenerator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
