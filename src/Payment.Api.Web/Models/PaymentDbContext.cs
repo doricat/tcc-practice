@@ -36,6 +36,7 @@ namespace Payment.Api.Web.Models
                 builder.Property(x => x.Id).HasColumnName("id").HasColumnType("bigint").IsRequired().ValueGeneratedNever();
                 builder.Property(x => x.AccountId).HasColumnName("account_id").HasColumnType("bigint").IsRequired();
                 builder.Property(x => x.Amount).HasColumnName("amount").HasColumnType("decimal(10, 2)").IsRequired();
+                builder.Property(x => x.TransactionId).HasColumnName("transaction_id").HasColumnType("bigint").IsRequired();
                 builder.Property(x => x.State).HasColumnName("state").HasColumnType("int").IsRequired()
                     .HasConversion(x => x.ToString(), x => (TccState) Enum.Parse(typeof(TccState), x));
                 builder.Property(x => x.CreatedAt).HasColumnName("created_at").HasColumnType("timestamp").IsRequired();

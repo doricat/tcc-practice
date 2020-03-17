@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using ApiModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace Payment.Api.Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
-            var account = await DbContext.Accounts.FirstOrDefaultAsync(x => x.UserId == id);
+            var account = await DbContext.Accounts.Include(x => x.Bills).FirstOrDefaultAsync(x => x.UserId == id);
 
             if (account == null)
             {
@@ -37,7 +38,15 @@ namespace Payment.Api.Web.Controllers
             {
                 Id = account.Id,
                 UserId = account.UserId,
-                AvailableBalance = account.Balance
+                AvailableBalance = account.Balance,
+
+                Items = account.Bills.Select(x => new AccountBillViewModel
+                {
+                    Id = x.Id,
+                    TransactionId = x.TransactionId,
+                    State = x.State.ToString(),
+                    Amount = x.Amount
+                }).ToList()
             }));
         }
     }

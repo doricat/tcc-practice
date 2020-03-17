@@ -9,6 +9,8 @@ namespace Payment.Api.Web.Models
 
         public decimal Amount { get; set; }
 
+        public long TransactionId { get; set; }
+
         public TccState State { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;

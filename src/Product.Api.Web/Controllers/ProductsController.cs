@@ -45,6 +45,7 @@ namespace Product.Api.Web.Controllers
             {
                 Id = entity.Id,
                 Name = entity.Name,
+                Image = entity.Image,
                 Price = entity.Price,
                 Qty = entity.Qty,
                 Description = entity.Description

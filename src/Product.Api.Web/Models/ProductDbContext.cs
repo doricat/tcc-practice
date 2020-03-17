@@ -24,6 +24,7 @@ namespace Product.Api.Web.Models
 
                 builder.Property(x => x.Id).HasColumnName("id").HasColumnType("bigint").IsRequired().ValueGeneratedNever();
                 builder.Property(x => x.Name).HasColumnName("name").HasColumnType("varchar(200)").IsRequired();
+                builder.Property(x => x.Image).HasColumnName("image").HasColumnType("text").IsRequired();
                 builder.Property(x => x.Price).HasColumnName("price").HasColumnType("decimal(10, 2)").IsRequired();
                 builder.Property(x => x.Qty).HasColumnName("qty").HasColumnType("int").IsRequired();
                 builder.Property(x => x.Description).HasColumnName("description").HasColumnType("text");

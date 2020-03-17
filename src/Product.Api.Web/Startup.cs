@@ -1,9 +1,11 @@
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Product.Api.Web.Models;
 using Serilog;
 using Web.Shared;
 
@@ -32,6 +34,8 @@ namespace Product.Api.Web
 
             services.AddSingleton(provider => new IdentityGeneratorOptions { InstanceTag = 0 });
             services.AddSingleton<IdentityGenerator>();
+
+            services.AddDbContext<ProductDbContext>(builder => builder.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
