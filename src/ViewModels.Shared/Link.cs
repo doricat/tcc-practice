@@ -6,6 +6,6 @@ namespace ViewModels.Shared
     {
         public string Uri { get; set; }
 
-        public DateTimeOffset Expires { get; set; }
+        public DateTime Expires { get; set; }
     }
 }

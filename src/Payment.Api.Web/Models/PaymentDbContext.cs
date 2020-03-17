@@ -39,6 +39,8 @@ namespace Payment.Api.Web.Models
                 builder.Property(x => x.State).HasColumnName("state").HasColumnType("int").IsRequired()
                     .HasConversion(x => x.ToString(), x => (TccState) Enum.Parse(typeof(TccState), x));
                 builder.Property(x => x.CreatedAt).HasColumnName("created_at").HasColumnType("timestamp").IsRequired();
+                builder.Property(x => x.Expires).HasColumnName("expires").HasColumnType("timestamp").IsRequired();
+                builder.Property(x => x.UpdatedAt).HasColumnName("updated_at").HasColumnType("timestamp").IsRequired();
 
                 builder.HasOne(x => x.Account).WithMany(x => x.Bills).HasForeignKey(x => x.AccountId);
             });

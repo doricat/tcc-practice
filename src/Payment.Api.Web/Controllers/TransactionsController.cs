@@ -13,10 +13,10 @@ using Web.Shared;
 namespace Payment.Api.Web.Controllers
 {
     [ApiController]
-    [Route("bills")]
-    public class BillsController : ControllerBase
+    [Route("transactions")]
+    public class TransactionsController : ControllerBase
     {
-        public BillsController(ILogger<BillsController> logger,
+        public TransactionsController(ILogger<TransactionsController> logger,
             PaymentDbContext dbContext,
             CancellationTaskRabbitMqMessageSender messageSender,
             IdentityGenerator generator)
@@ -27,7 +27,7 @@ namespace Payment.Api.Web.Controllers
             Generator = generator;
         }
 
-        public ILogger<BillsController> Logger { get; }
+        public ILogger<TransactionsController> Logger { get; }
 
         public PaymentDbContext DbContext { get; }
 
@@ -47,14 +47,14 @@ namespace Payment.Api.Web.Controllers
                     id,
                     uid = model.UserId,
                     amount = model.Amount,
-                    bid = model.TransactionId,
+                    tid = model.TransactionId,
                     now,
                     expires
                 });
 
             if (result == BillCreatingResult.Ok)
             {
-                var uri = $"{Request.Scheme}://{Request.Host}/bills/{model.TransactionId}";
+                var uri = $"{Request.Scheme}://{Request.Host}/transactions/{model.TransactionId}";
 
                 await MessageSender.SendAsync(new CancellationItem
                 {
@@ -63,7 +63,7 @@ namespace Payment.Api.Web.Controllers
 
                 Logger.LogInformation("账单创建成功: {id}, {uri}", model.TransactionId, uri);
 
-                return Created(uri, new ObjectCreatedOutputModel<long>(model.TransactionId, uri));
+                return Created(uri, new TransactionObjectCreatedOutputModel<long>(model.TransactionId, uri, expires));
             }
 
             if (result == BillCreatingResult.InsufficientBalance)
@@ -78,9 +78,9 @@ namespace Payment.Api.Web.Controllers
         public async Task<IActionResult> Put(long id)
         {
             var result = await DbContext.Database.GetDbConnection()
-                .QueryFirstOrDefaultAsync<bool>(@"select confirm_bill(@bid, @now);", new
+                .QueryFirstOrDefaultAsync<bool>(@"select confirm_bill(@tid, @now);", new
                 {
-                    bid = id,
+                    tid = id,
                     now = DateTime.Now
                 });
 
@@ -98,9 +98,9 @@ namespace Payment.Api.Web.Controllers
         public async Task<IActionResult> Delete(long id)
         {
             var result = await DbContext.Database.GetDbConnection()
-                .QueryFirstOrDefaultAsync<bool>(@"select cancel_bill(@bid, @now);", new
+                .QueryFirstOrDefaultAsync<bool>(@"select cancel_bill(@tid, @now);", new
                 {
-                    bid = id,
+                    tid = id,
                     now = DateTime.Now
                 });
 

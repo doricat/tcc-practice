@@ -44,12 +44,14 @@ namespace Product.Api.Web.Controllers
             var result = await DbContext
                 .Database
                 .GetDbConnection()
-                .QueryFirstOrDefaultAsync<SaleLogCreatingResult>(@"select create_log(@id, @uid, @tid, @now, @expires);",
+                .QueryFirstOrDefaultAsync<SaleLogCreatingResult>(@"select create_log(@id, @uid, @tid, @pid, @qty, @now, @expires);",
                     new
                     {
                         id,
                         uid = model.UserId,
                         tid = model.TransactionId,
+                        pid = model.ProductId,
+                        qty = model.Qty,
                         now,
                         expires
                     });
@@ -65,7 +67,7 @@ namespace Product.Api.Web.Controllers
 
                 Logger.LogInformation("商品保留成功: {id}, {uri}", model.TransactionId, uri);
 
-                return Created(uri, new ObjectCreatedOutputModel<long>(model.TransactionId, uri));
+                return Created(uri, new TransactionObjectCreatedOutputModel<long>(model.TransactionId, uri, expires));
             }
 
             if (result == SaleLogCreatingResult.OutOfStock)

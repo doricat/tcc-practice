@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using Domain.Shared;
 
-namespace Payment.Api.Web.Models
+namespace Order.Api.Web.Models
 {
-    public class Bill : Entity
+    public class Order : Entity
     {
-        public long AccountId { get; set; }
+        public long UserId { get; set; }
 
-        public decimal Amount { get; set; }
+        public long TransactionId { get; set; }
 
         public TccState State { get; set; }
 
@@ -17,6 +18,6 @@ namespace Payment.Api.Web.Models
 
         public DateTime UpdatedAt { get; set; }
 
-        public virtual Account Account { get; set; }
+        public virtual ICollection<OrderItem> Items { get; set; }
     }
 }
