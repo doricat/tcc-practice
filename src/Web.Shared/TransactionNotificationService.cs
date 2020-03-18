@@ -34,7 +34,10 @@ namespace Web.Shared
                 {
                     Logger.LogInformation("Received notification {0}", e.Payload);
 
-                    var model = JsonSerializer.Deserialize<TransactionViewModel>(e.Payload);
+                    var model = JsonSerializer.Deserialize<TransactionViewModel>(e.Payload, new JsonSerializerOptions
+                    {
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    });
                     MessageSender.SendAsync(model);
                 };
 

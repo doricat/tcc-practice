@@ -7,6 +7,7 @@ using Domain.Shared;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Order.Api.Web.Models;
 using ViewModels.Shared.Order;
@@ -21,12 +22,14 @@ namespace Order.Api.Web.Controllers
         public TransactionsController(ILogger<TransactionsController> logger,
             IdentityGenerator generator,
             OrderDbContext dbContext,
-            CancellationTaskRabbitMqMessageSender messageSender)
+            CancellationTaskRabbitMqMessageSender messageSender, 
+            IConfiguration configuration)
         {
             Logger = logger;
             Generator = generator;
             DbContext = dbContext;
             MessageSender = messageSender;
+            Configuration = configuration;
         }
 
         public ILogger<TransactionsController> Logger { get; }
@@ -36,6 +39,8 @@ namespace Order.Api.Web.Controllers
         public OrderDbContext DbContext { get; }
 
         public CancellationTaskRabbitMqMessageSender MessageSender { get; }
+
+        public IConfiguration Configuration { get; }
 
         [HttpPost]
         public async Task<IActionResult> Post(OrderCreationInputModel model)

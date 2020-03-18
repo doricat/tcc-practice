@@ -207,7 +207,7 @@ namespace PetShop.Web.Controllers
     {
         public long ProductId { get; set; }
 
-        public bool ConfirmingNow { get; set; }
+        public bool ConfirmingNow { get; set; } = true;
 
         public int Timeout { get; set; } = 5000; // ms
     }
