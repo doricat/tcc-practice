@@ -5,6 +5,7 @@ using Dapper;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Payment.Api.Web.Models;
 using ViewModels.Shared.Payment;
@@ -19,12 +20,14 @@ namespace Payment.Api.Web.Controllers
         public TransactionsController(ILogger<TransactionsController> logger,
             PaymentDbContext dbContext,
             CancellationTaskRabbitMqMessageSender messageSender,
-            IdentityGenerator generator)
+            IdentityGenerator generator, 
+            IConfiguration configuration)
         {
             Logger = logger;
             DbContext = dbContext;
             MessageSender = messageSender;
             Generator = generator;
+            Configuration = configuration;
         }
 
         public ILogger<TransactionsController> Logger { get; }
@@ -35,11 +38,13 @@ namespace Payment.Api.Web.Controllers
 
         public IdentityGenerator Generator { get; }
 
+        public IConfiguration Configuration { get; }
+
         [HttpPost]
         public async Task<IActionResult> Post(BillCreationInputModel model)
         {
             var now = DateTime.Now;
-            var expires = now.AddMilliseconds(model.Timeout);
+            var expires = now.AddMilliseconds(Configuration.GetValue<int>("TransactionTimeout"));
             var id = Generator.Generate();
             var result = await DbContext.Database.GetDbConnection()
                 .QueryFirstOrDefaultAsync<BillCreatingResult>(@"select create_bill(@id, @uid, @amount, @tid, @now, @expires);", new

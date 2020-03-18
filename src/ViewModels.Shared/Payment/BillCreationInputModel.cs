@@ -7,7 +7,5 @@
         public long TransactionId { get; set; }
 
         public decimal Amount { get; set; }
-
-        public int Timeout { get; set; } = 5000; // ms
     }
 }

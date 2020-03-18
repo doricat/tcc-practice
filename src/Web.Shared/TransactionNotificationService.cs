@@ -30,7 +30,7 @@ namespace Web.Shared
             using (var conn = new NpgsqlConnection(Configuration.GetConnectionString("DefaultConnection")))
             {
                 await conn.OpenAsync(stoppingToken);
-                conn.Notification += (o, e) =>
+                conn.Notification += async (o, e) =>
                 {
                     Logger.LogInformation("Received notification {0}", e.Payload);
 
@@ -38,7 +38,8 @@ namespace Web.Shared
                     {
                         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                     });
-                    MessageSender.SendAsync(model);
+                    model.ServiceName = Configuration.GetValue<string>("ServiceName");
+                    await MessageSender.SendAsync(model);
                 };
 
                 var channelName = Configuration.GetValue<string>("ChannelName");

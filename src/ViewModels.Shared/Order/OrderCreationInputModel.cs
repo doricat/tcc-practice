@@ -8,8 +8,6 @@ namespace ViewModels.Shared.Order
 
         public long TransactionId { get; set; }
 
-        public int Timeout { get; set; } = 5000; // ms
-
         public IList<OrderItemCreationInputModel> Items { get; set; }
     }
 }

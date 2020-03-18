@@ -84,8 +84,7 @@ namespace PetShop.Web.Controllers
                     UserId = userId,
                     TransactionId = transactionId,
                     ProductId = model.ProductId,
-                    Qty = 1,
-                    Timeout = model.Timeout
+                    Qty = 1
                 }), Encoding.UTF8, "application/json"));
 
             var orderTask = client.PostAsync($"{Configuration["Order"]}/transactions",
@@ -93,7 +92,6 @@ namespace PetShop.Web.Controllers
                 {
                     UserId = userId,
                     TransactionId = transactionId,
-                    Timeout = model.Timeout,
                     Items = new List<OrderItemCreationInputModel>
                     {
                         new OrderItemCreationInputModel
@@ -110,8 +108,7 @@ namespace PetShop.Web.Controllers
                 {
                     UserId = userId,
                     TransactionId = transactionId,
-                    Amount = -productInfo.Price,
-                    Timeout = model.Timeout
+                    Amount = -productInfo.Price
                 }), Encoding.UTF8, "application/json"));
 
             Task.WaitAll(saleTask, billTask);
@@ -169,21 +166,15 @@ namespace PetShop.Web.Controllers
                 }
             };
 
+            var resp = await client.PutAsync($"{Configuration["Coordinator"]}/coordinator/confirm",
+                new StringContent(JsonSerializer.Serialize(new CoordinatorViewModel
+                {
+                    Links = links
+                }), Encoding.UTF8, "application/json"));
 
-            if (model.ConfirmingNow)
-            {
-                var resp = await client.PutAsync($"{Configuration["Coordinator"]}/coordinator/confirm",
-                    new StringContent(JsonSerializer.Serialize(new CoordinatorViewModel
-                    {
-                        Links = links
-                    }), Encoding.UTF8, "application/json"));
+            Logger.LogInformation("协调器返回结果: {code}", resp.StatusCode);
 
-                Logger.LogInformation("协调器返回结果: {code}", resp.StatusCode);
-
-                return NoContent();
-            }
-
-            return Ok(new ApiResult<List<Link>>(links));
+            return NoContent();
         }
 
         [HttpPut]
@@ -206,10 +197,6 @@ namespace PetShop.Web.Controllers
     public class OrderCreationInputModel2
     {
         public long ProductId { get; set; }
-
-        public bool ConfirmingNow { get; set; } = true;
-
-        public int Timeout { get; set; } = 5000; // ms
     }
 
     public class ManualConfirmOrderInputModel

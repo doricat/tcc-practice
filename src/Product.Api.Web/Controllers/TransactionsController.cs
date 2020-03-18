@@ -5,7 +5,9 @@ using Dapper;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Product.Api.Web.Models;
 using ViewModels.Shared.Product;
 using Web.Shared;
@@ -19,12 +21,14 @@ namespace Product.Api.Web.Controllers
         public TransactionsController(ILogger<TransactionsController> logger,
             ProductDbContext dbContext,
             CancellationTaskRabbitMqMessageSender messageSender,
-            IdentityGenerator generator)
+            IdentityGenerator generator,
+            IConfiguration configuration)
         {
             Logger = logger;
             DbContext = dbContext;
             MessageSender = messageSender;
             Generator = generator;
+            Configuration = configuration;
         }
 
         public ILogger<TransactionsController> Logger { get; }
@@ -35,11 +39,13 @@ namespace Product.Api.Web.Controllers
 
         public IdentityGenerator Generator { get; }
 
+        public IConfiguration Configuration { get; }
+
         [HttpPost]
         public async Task<IActionResult> Post(ProductReserveInputModel model)
         {
             var now = DateTime.Now;
-            var expires = now.AddMilliseconds(model.Timeout);
+            var expires = now.AddMilliseconds(Configuration.GetValue<int>("TransactionTimeout"));
             var id = Generator.Generate();
             var result = await DbContext
                 .Database

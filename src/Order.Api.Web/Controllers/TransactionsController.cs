@@ -46,7 +46,7 @@ namespace Order.Api.Web.Controllers
         public async Task<IActionResult> Post(OrderCreationInputModel model)
         {
             var now = DateTime.Now;
-            var expires = now.AddMilliseconds(model.Timeout);
+            var expires = now.AddMilliseconds(Configuration.GetValue<int>("TransactionTimeout"));
             var id = Generator.Generate();
 
             var order = new Models.Order
