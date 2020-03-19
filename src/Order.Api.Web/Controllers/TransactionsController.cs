@@ -64,7 +64,9 @@ namespace Order.Api.Web.Controllers
                     OrderId = id,
                     ProductId = x.ProductId,
                     Qty = x.Qty,
-                    Price = x.Price
+                    Price = x.Price,
+                    Name = x.Name,
+                    Image = x.Image
                 }).ToList()
             };
 

@@ -37,12 +37,12 @@ namespace PetShop.Web.Controllers
             var client = ClientFactory.CreateClient();
             var accountResp = await client.GetAsync($"{Configuration["Payment"]}/accounts/{userId}");
             var content = await accountResp.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<AccountSummaryViewModel>(content, new JsonSerializerOptions
+            var result = JsonSerializer.Deserialize<ApiResult<AccountSummaryViewModel>>(content, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-            return Ok(new ApiResult<AccountSummaryViewModel>(result));
+            return Ok(result);
         }
     }
 }

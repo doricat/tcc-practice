@@ -14,6 +14,8 @@ create table order_items
     id         bigint         not null primary key,
     order_id   bigint         not null,
     product_id bigint         not null,
+    name       varchar(200)   not null,
+    image      text           not null,
     price      decimal(10, 2) not null,
     qty        int            not null,
     foreign key (order_id) references orders (id)

@@ -48,12 +48,12 @@ namespace PetShop.Web.Controllers
             var client = ClientFactory.CreateClient();
             var orderResp = await client.GetAsync($"{Configuration["Order"]}/orders/{userId}");
             var content = await orderResp.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<IList<OrderViewModel>>(content, new JsonSerializerOptions
+            var result = JsonSerializer.Deserialize<ApiResult<IList<OrderViewModel>>>(content, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-            return Ok(new ApiResult<IList<OrderViewModel>>(result));
+            return Ok(result);
         }
 
         [HttpPost]
@@ -98,7 +98,9 @@ namespace PetShop.Web.Controllers
                         {
                             ProductId = model.ProductId,
                             Qty = 1,
-                            Price = productInfo.Price
+                            Price = productInfo.Price,
+                            Image = productInfo.Image,
+                            Name = productInfo.Name
                         }
                     }
                 }), Encoding.UTF8, "application/json"));

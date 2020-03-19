@@ -35,12 +35,12 @@ namespace PetShop.Web.Controllers
             var client = ClientFactory.CreateClient();
             var productResp = await client.GetAsync($"{Configuration["Product"]}/products");
             var content = await productResp.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<IList<ProductViewModel>>(content, new JsonSerializerOptions
+            var result = JsonSerializer.Deserialize<ApiResult<IList<ProductViewModel>>>(content, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-            return Ok(new ApiResult<IList<ProductViewModel>>(result));
+            return Ok(result);
         }
     }
 }

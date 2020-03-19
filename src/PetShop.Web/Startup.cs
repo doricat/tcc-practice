@@ -83,10 +83,7 @@ namespace PetShop.Web
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            if (env.IsStaging())
-            {
-                app.UseSpa(spa => { spa.UseProxyToSpaDevelopmentServer("http://localhost:3001"); });
-            }
+            app.UseSpa(spa => { spa.UseProxyToSpaDevelopmentServer("http://localhost:3001"); });
         }
     }
 }

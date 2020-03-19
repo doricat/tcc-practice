@@ -41,6 +41,8 @@ namespace Order.Api.Web.Models
                 builder.Property(x => x.Id).HasColumnName("id").HasColumnType("bigint").IsRequired().ValueGeneratedNever();
                 builder.Property(x => x.OrderId).HasColumnName("order_id").HasColumnType("bigint").IsRequired();
                 builder.Property(x => x.ProductId).HasColumnName("product_id").HasColumnType("bigint").IsRequired();
+                builder.Property(x => x.Name).HasColumnName("name").HasColumnType("varchar(200)").IsRequired();
+                builder.Property(x => x.Image).HasColumnName("image").HasColumnType("text").IsRequired();
                 builder.Property(x => x.Price).HasColumnName("price").HasColumnType("decimal(10, 2)").IsRequired();
                 builder.Property(x => x.Qty).HasColumnName("qty").HasColumnType("int").IsRequired();
 

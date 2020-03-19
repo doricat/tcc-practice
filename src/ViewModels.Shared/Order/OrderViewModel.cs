@@ -9,6 +9,10 @@ namespace ViewModels.Shared.Order
 
         public long UserId { get; set; }
 
+        public long TransactionId { get; set; }
+
+        public string State { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public IList<OrderItemViewModel> Items { get; set; }
