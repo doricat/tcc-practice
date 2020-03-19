@@ -42,7 +42,7 @@ const Home = () => {
         : null;
 
     const items = state.items.map(x => (
-        <Alert key={x.sid} state={x.state} serviceName={x.serviceName} tid={x.tid} beginTime={x.beginTime} expires={x.expires} />
+        <Alert key={x.sid} state={x.state} serviceName={x.serviceName} tid={x.sid} beginTime={x.beginTime} expires={x.expires} />
     ));
 
     return (
