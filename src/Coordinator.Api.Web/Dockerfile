@@ -6,11 +6,11 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["test/Coordinator.Api.Web/Coordinator.Api.Web.csproj", "test/Coordinator.Api.Web/"]
+COPY ["src/Coordinator.Api.Web/Coordinator.Api.Web.csproj", "src/Coordinator.Api.Web/"]
 COPY ["src/ViewModels.Shared/ViewModels.Shared.csproj", "src/ViewModels.Shared/"]
-RUN dotnet restore "test/Coordinator.Api.Web/Coordinator.Api.Web.csproj"
+RUN dotnet restore "src/Coordinator.Api.Web/Coordinator.Api.Web.csproj"
 COPY . .
-WORKDIR "/src/test/Coordinator.Api.Web"
+WORKDIR "/src/src/Coordinator.Api.Web"
 RUN dotnet build "Coordinator.Api.Web.csproj" -c Release -o /app/build
 
 FROM build AS publish
