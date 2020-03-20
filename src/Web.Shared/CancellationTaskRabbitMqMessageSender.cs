@@ -45,7 +45,7 @@ namespace Web.Shared
 
         public Task SendAsync(object data)
         {
-            var options = RabbitMqOptionsMonitor.CurrentValue;
+            var options = RabbitMqOptionsMonitor.Get("CancellationTask");
             var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(data,
                 new JsonSerializerOptions
                 {

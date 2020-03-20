@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -34,12 +35,20 @@ namespace Web.Shared
                 {
                     Logger.LogInformation("Received notification {0}", e.Payload);
 
-                    var model = JsonSerializer.Deserialize<TransactionViewModel>(e.Payload, new JsonSerializerOptions
+                    try
                     {
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                    });
-                    model.ServiceName = Configuration.GetValue<string>("ServiceName");
-                    await MessageSender.SendAsync(model);
+                        var model = JsonSerializer.Deserialize<TransactionViewModel>(e.Payload, new JsonSerializerOptions
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                        });
+                        model.ServiceName = Configuration.GetValue<string>("ServiceName");
+                        await MessageSender.SendAsync(model);
+                    }
+                    catch (JsonException ex)
+                    {
+                        Logger.LogError(ex, "反序列化失败 {json}", e.Payload);
+                        // Ignored
+                    }
                 };
 
                 var channelName = Configuration.GetValue<string>("ChannelName");
