@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using ApiModels;
 using Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -18,6 +19,7 @@ using ViewModels.Shared.Product;
 
 namespace PetShop.Web.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("orders")]
     public class OrdersController : ControllerBase
