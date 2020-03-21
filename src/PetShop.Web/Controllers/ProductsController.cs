@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ApiModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -14,7 +13,6 @@ using ViewModels.Shared.Product;
 
 namespace PetShop.Web.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("products")]
     public class ProductsController : ControllerBase

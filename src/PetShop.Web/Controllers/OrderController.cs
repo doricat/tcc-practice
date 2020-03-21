@@ -81,6 +81,7 @@ namespace PetShop.Web.Controllers
 
             var productInfo = JsonSerializer.Deserialize<ProductViewModel>(productInfoContent, jsonSerializerOptions);
 
+            // 仅适用于演示
             var saleTask = client.PostAsync($"{Configuration["Product"]}/transactions",
                 new StringContent(JsonSerializer.Serialize(new ProductReserveInputModel
                 {
@@ -148,7 +149,6 @@ namespace PetShop.Web.Controllers
                 throw new NotImplementedException();
             }
 
-            // 演示需求
             var saleInfo = JsonSerializer.Deserialize<TransactionObjectCreatedOutputModel<long>>(saleResult, jsonSerializerOptions);
             var orderInfo = JsonSerializer.Deserialize<TransactionObjectCreatedOutputModel<long>>(orderResult, jsonSerializerOptions);
             var billInfo = JsonSerializer.Deserialize<TransactionObjectCreatedOutputModel<long>>(billResult, jsonSerializerOptions);
