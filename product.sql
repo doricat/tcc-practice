@@ -106,14 +106,30 @@ create or replace function notify_sale_log_state()
     returns trigger
 as
 $func$
+declare
+    __json text;
 begin
-    perform pg_notify('transaction_channel', json_build_object(
-                                                     'id', new.transaction_id,
-                                                     'state', new.state,
-                                                     'beginTime', new.created_at,
-                                                     'expires', new.expires
-                                                 ) #>> '{}');
-    return new;
+    if (tg_op = 'INSERT') then
+        __json = json_build_object(
+                         'id', new.transaction_id,
+                         'state', new.state,
+                         'beginTime', new.created_at,
+                         'expires', new.expires
+                     ) #>> '{}';
+    elseif (tg_op = 'UPDATE') then
+        __json = json_build_object(
+                         'id', old.transaction_id,
+                         'state', new.state,
+                         'beginTime', old.created_at,
+                         'expires', old.expires
+                     ) #>> '{}';
+    end if;
+
+    if (__json is not null) then
+        perform pg_notify('transaction_channel', __json);
+    end if;
+
+    return null;
 end;
 $func$ language plpgsql;
 

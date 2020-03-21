@@ -45,8 +45,8 @@ create or replace function cancel_order(_transaction_id bigint, _updated_at time
 as
 $func$
 declare
-    __state      varchar(20);
-    __expires    timestamp;
+    __state   varchar(20);
+    __expires timestamp;
 begin
     select state, expires
     into __state, __expires
@@ -67,14 +67,30 @@ create or replace function notify_order_state()
     returns trigger
 as
 $func$
+declare
+    __json text;
 begin
-    perform pg_notify('transaction_channel', json_build_object(
-                                                     'id', new.transaction_id,
-                                                     'state', new.state,
-                                                     'beginTime', new.created_at,
-                                                     'expires', new.expires
-                                                 ) #>> '{}');
-    return new;
+    if (tg_op = 'INSERT') then
+        __json = json_build_object(
+                         'id', new.transaction_id,
+                         'state', new.state,
+                         'beginTime', new.created_at,
+                         'expires', new.expires
+                     ) #>> '{}';
+    elseif (tg_op = 'UPDATE') then
+        __json = json_build_object(
+                         'id', old.transaction_id,
+                         'state', new.state,
+                         'beginTime', old.created_at,
+                         'expires', old.expires
+                     ) #>> '{}';
+    end if;
+
+    if (__json is not null) then
+        perform pg_notify('transaction_channel', __json);
+    end if;
+
+    return null;
 end;
 $func$ language plpgsql;
 
