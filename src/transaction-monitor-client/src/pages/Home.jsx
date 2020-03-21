@@ -13,7 +13,7 @@ const Home = () => {
             .build();
 
         connection.on("ReceiveMessage", args => {
-            var index = state.items.findIndex(x => x.sid === args.sid);
+            var index = state.items.findIndex(x => x.sid === args.sid && x.serviceName === args.serviceName);
             if (index !== -1) {
                 state.items[index].state = args.state;
                 const nextState = { tip: undefined, items: state.items };
