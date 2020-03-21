@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -12,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PetShop.Web.ViewModels;
 using ViewModels.Shared;
 using ViewModels.Shared.Order;
 using ViewModels.Shared.Payment;
@@ -46,7 +46,7 @@ namespace PetShop.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var userId = long.Parse(User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var userId = long.Parse(User.Claims.First(x => x.Type == "sub").Value);
             var client = ClientFactory.CreateClient();
             var orderResp = await client.GetAsync($"{Configuration["Order"]}/orders/{userId}");
             var content = await orderResp.Content.ReadAsStringAsync();
@@ -55,22 +55,23 @@ namespace PetShop.Web.Controllers
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-            return Ok(result);
+            return Ok(new ApiResult<IList<OrderOutputViewModel>>(result.Value.Select(OrderOutputViewModel.FromApiModel).ToList()));
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(OrderCreationInputModel2 model)
         {
-            var userId = long.Parse(User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var userId = long.Parse(User.Claims.First(x => x.Type == "sub").Value);
             var client = ClientFactory.CreateClient();
             var transactionId = Generator.Generate();
+            var productId = long.Parse(model.ProductId);
 
             var jsonSerializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
-            var productInfoResp = await client.GetAsync($"{Configuration["Product"]}/products/{model.ProductId}");
+            var productInfoResp = await client.GetAsync($"{Configuration["Product"]}/products/{productId}");
             var productInfoContent = await productInfoResp.Content.ReadAsStringAsync();
             if (!productInfoResp.IsSuccessStatusCode)
             {
@@ -85,7 +86,7 @@ namespace PetShop.Web.Controllers
                 {
                     UserId = userId,
                     TransactionId = transactionId,
-                    ProductId = model.ProductId,
+                    ProductId = productId,
                     Qty = 1
                 }), Encoding.UTF8, "application/json"));
 
@@ -98,7 +99,7 @@ namespace PetShop.Web.Controllers
                     {
                         new OrderItemCreationInputModel
                         {
-                            ProductId = model.ProductId,
+                            ProductId = productId,
                             Qty = 1,
                             Price = productInfo.Price,
                             Image = productInfo.Image,
@@ -178,33 +179,7 @@ namespace PetShop.Web.Controllers
 
             Logger.LogInformation("协调器返回结果: {code}", resp.StatusCode);
 
-            return NoContent();
+            return StatusCode(201);
         }
-
-        [HttpPut]
-        public async Task<IActionResult> Put([FromBody] ManualConfirmOrderInputModel model)
-        {
-            var client = ClientFactory.CreateClient();
-
-            var resp = await client.PutAsync($"{Configuration["Coordinator"]}/coordinator/confirm",
-                new StringContent(JsonSerializer.Serialize(new CoordinatorViewModel
-                {
-                    Links = model.Links
-                }), Encoding.UTF8, "application/json"));
-
-            Logger.LogInformation("协调器返回结果: {code}", resp.StatusCode);
-
-            return NoContent();
-        }
-    }
-
-    public class OrderCreationInputModel2
-    {
-        public long ProductId { get; set; }
-    }
-
-    public class ManualConfirmOrderInputModel
-    {
-        public IList<Link> Links { get; set; }
     }
 }

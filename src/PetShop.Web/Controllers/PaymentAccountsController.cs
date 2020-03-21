@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ApiModels;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PetShop.Web.ViewModels;
 using ViewModels.Shared.Payment;
 
 namespace PetShop.Web.Controllers
@@ -35,7 +35,7 @@ namespace PetShop.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var userId = long.Parse(User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var userId = long.Parse(User.Claims.First(x => x.Type == "sub").Value);
             var client = ClientFactory.CreateClient();
             var accountResp = await client.GetAsync($"{Configuration["Payment"]}/accounts/{userId}");
             var content = await accountResp.Content.ReadAsStringAsync();
@@ -44,7 +44,7 @@ namespace PetShop.Web.Controllers
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-            return Ok(result);
+            return Ok(new ApiResult<AccountSummaryOutputViewModel>(AccountSummaryOutputViewModel.FromApiModel(result.Value)));
         }
     }
 }

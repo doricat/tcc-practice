@@ -35,7 +35,7 @@ namespace Product.Api.Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
-            var product = await DbContext.Products.FindAsync(id, HttpContext.RequestAborted);
+            var product = await DbContext.Products.FirstOrDefaultAsync(x => x.Id == id, HttpContext.RequestAborted);
             return Ok(new ApiResult<ProductViewModel>(ToViewModel(product)));
         }
 

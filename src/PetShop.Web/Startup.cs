@@ -1,6 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -56,6 +57,9 @@ namespace PetShop.Web
                         }
                     };
                 });
+
+            services.AddSingleton(provider => new IdentityGeneratorOptions { InstanceTag = 3 });
+            services.AddSingleton<IdentityGenerator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

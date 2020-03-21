@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -7,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PetShop.Web.ViewModels;
 using ViewModels.Shared.Product;
 
 namespace PetShop.Web.Controllers
@@ -16,8 +19,8 @@ namespace PetShop.Web.Controllers
     [Route("products")]
     public class ProductsController : ControllerBase
     {
-        public ProductsController(ILogger<ProductsController> logger, 
-            IHttpClientFactory clientFactory, 
+        public ProductsController(ILogger<ProductsController> logger,
+            IHttpClientFactory clientFactory,
             IConfiguration configuration)
         {
             Logger = logger;
@@ -32,17 +35,22 @@ namespace PetShop.Web.Controllers
         public IConfiguration Configuration { get; }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(long id)
+        public async Task<IActionResult> Get(string id)
         {
             var client = ClientFactory.CreateClient();
             var productResp = await client.GetAsync($"{Configuration["Product"]}/products/{id}");
+            if (productResp.StatusCode == HttpStatusCode.NotFound)
+            {
+                return NotFound();
+            }
+
             var content = await productResp.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<ApiResult<ProductViewModel>>(content, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-            return Ok(result);
+            return Ok(new ApiResult<ProductOutputViewModel>(ProductOutputViewModel.FromApiModel(result.Value)));
         }
 
         [HttpGet]
@@ -56,7 +64,7 @@ namespace PetShop.Web.Controllers
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-            return Ok(result);
+            return Ok(new ApiResult<IList<ProductOutputViewModel>>(result.Value.Select(ProductOutputViewModel.FromApiModel).ToList()));
         }
     }
 }

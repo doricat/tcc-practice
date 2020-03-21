@@ -35,7 +35,8 @@ namespace Web.Shared
             _channel.QueueDeclare(queue: options.Queue,
                 durable: true,
                 exclusive: false,
-                autoDelete: false
+                autoDelete: false,
+                arguments: options.Arguments
             );
         }
 
