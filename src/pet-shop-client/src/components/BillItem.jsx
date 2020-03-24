@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BillItem = () => {
+const BillItem = ({ info }) => {
     return (
         <>
             <div style={{ border: "1px solid #d6d8db", borderRadius: "0.25rem" }} className="mb-3">
@@ -11,10 +11,10 @@ const BillItem = () => {
                     <div className="col-md-3"><p>事务状态</p></div>
                 </div>
                 <div className="row">
-                    <div className="col-md-3">123456789</div>
-                    <div className="col-md-3">123456789</div>
-                    <div className="col-md-3">￥-100</div>
-                    <div className="col-md-3">Pending</div>
+                    <div className="col-md-3">{info.id}</div>
+                    <div className="col-md-3">{info.transactionId}</div>
+                    <div className="col-md-3">￥{info.amount}</div>
+                    <div className="col-md-3">{info.state}</div>
                 </div>
             </div>
         </>

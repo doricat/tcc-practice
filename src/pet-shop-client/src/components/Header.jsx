@@ -27,9 +27,6 @@ const Header = () => {
                                     <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/shopping_car">购物车</NavLink>
-                                </NavItem>
-                                <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/order">订单</NavLink>
                                 </NavItem>
                                 <NavItem>
