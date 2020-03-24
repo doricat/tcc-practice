@@ -1,3 +1,4 @@
+-- pgsql
 create table products
 (
     id          bigint         not null primary key,

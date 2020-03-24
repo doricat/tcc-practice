@@ -31,16 +31,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCancellation.Service", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8B14D0B-B18B-472B-81F1-790D19F5974F}"
 	ProjectSection(SolutionItems) = preProject
+		identity-server.sql = identity-server.sql
 		order.sql = order.sql
 		payment.sql = payment.sql
 		product.sql = product.sql
+		user.sql = user.sql
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.Web", "src\IdentityServer.Web\IdentityServer.Web.csproj", "{EF07B3FA-4908-447C-87B9-F126581ADE88}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetShop.Web", "src\PetShop.Web\PetShop.Web.csproj", "{6E2597C6-3192-42A5-B20B-1482419EBC32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Shared", "src\Domain.Shared\Domain.Shared.csproj", "{B2221CAF-5475-40BB-AF0D-5FA0F5D9D68D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Shared", "src\Domain.Shared\Domain.Shared.csproj", "{B2221CAF-5475-40BB-AF0D-5FA0F5D9D68D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

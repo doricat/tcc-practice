@@ -1,3 +1,4 @@
+-- pgsql
 create table accounts
 (
     id      bigint         not null primary key,

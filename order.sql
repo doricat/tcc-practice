@@ -1,3 +1,4 @@
+-- pgsql
 create table orders
 (
     id             bigint      not null primary key,
