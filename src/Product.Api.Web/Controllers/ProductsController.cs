@@ -28,14 +28,19 @@ namespace Product.Api.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var products = await DbContext.Products.ToListAsync(HttpContext.RequestAborted);
+            var products = await DbContext.Products.Where(x => x.Qty > 0).ToListAsync(HttpContext.RequestAborted);
             return Ok(new ApiResult<IList<ProductViewModel>>(products.Select(ToViewModel).ToList()));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
-            var product = await DbContext.Products.FirstOrDefaultAsync(x => x.Id == id, HttpContext.RequestAborted);
+            var product = await DbContext.Products.FirstOrDefaultAsync(x => x.Id == id && x.Qty > 0, HttpContext.RequestAborted);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
             return Ok(new ApiResult<ProductViewModel>(ToViewModel(product)));
         }
 

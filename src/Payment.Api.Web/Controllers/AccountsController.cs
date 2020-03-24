@@ -39,13 +39,13 @@ namespace Payment.Api.Web.Controllers
                 Id = account.Id,
                 UserId = account.UserId,
                 AvailableBalance = account.Balance,
-
                 Items = account.Bills.Select(x => new AccountBillViewModel
                 {
                     Id = x.Id,
                     TransactionId = x.TransactionId,
                     State = x.State.ToString(),
-                    Amount = x.Amount
+                    Amount = x.Amount,
+                    CreatedAt = x.CreatedAt
                 }).ToList()
             }));
         }

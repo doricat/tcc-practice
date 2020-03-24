@@ -33,6 +33,8 @@ namespace Order.Api.Web.Controllers
                 Id = x.Id,
                 UserId = x.UserId,
                 CreatedAt = x.CreatedAt,
+                State = x.State.ToString(),
+                TransactionId = x.TransactionId,
                 Items = x.Items.Select(y => new OrderItemViewModel
                 {
                     Id = y.Id,

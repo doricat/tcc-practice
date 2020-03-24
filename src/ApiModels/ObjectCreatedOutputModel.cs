@@ -21,6 +21,8 @@ namespace ApiModels
 
     public class TransactionObjectCreatedOutputModel<TKey> : ObjectCreatedOutputModel<TKey>
     {
+        public TransactionObjectCreatedOutputModel() { }
+
         public TransactionObjectCreatedOutputModel(TKey id, string location, DateTime expires) : base(id, location)
         {
             Expires = expires;

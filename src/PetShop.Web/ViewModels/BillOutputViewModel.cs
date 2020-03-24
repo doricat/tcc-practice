@@ -1,4 +1,5 @@
-﻿using ViewModels.Shared.Payment;
+﻿using System;
+using ViewModels.Shared.Payment;
 
 namespace PetShop.Web.ViewModels
 {
@@ -12,6 +13,8 @@ namespace PetShop.Web.ViewModels
 
         public string State { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+
         public static BillOutputViewModel FromApiModel(AccountBillViewModel model)
         {
             return new BillOutputViewModel
@@ -19,7 +22,8 @@ namespace PetShop.Web.ViewModels
                 Id = model.Id.ToString(),
                 TransactionId = model.TransactionId.ToString(),
                 Amount = model.Amount,
-                State = model.State
+                State = model.State,
+                CreatedAt = model.CreatedAt
             };
         }
     }

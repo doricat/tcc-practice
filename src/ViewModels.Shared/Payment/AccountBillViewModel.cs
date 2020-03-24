@@ -1,4 +1,6 @@
-﻿namespace ViewModels.Shared.Payment
+﻿using System;
+
+namespace ViewModels.Shared.Payment
 {
     public class AccountBillViewModel
     {
@@ -9,5 +11,7 @@
         public decimal Amount { get; set; }
 
         public string State { get; set; }
+
+        public DateTime CreatedAt { get; set; }
     }
 }

@@ -35,6 +35,11 @@ namespace PetShop.Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
+            if (!long.TryParse(id, out _))
+            {
+                return NotFound();
+            }
+
             var client = ClientFactory.CreateClient();
             var productResp = await client.GetAsync($"{Configuration["Product"]}/products/{id}");
             if (productResp.StatusCode == HttpStatusCode.NotFound)

@@ -79,7 +79,7 @@ namespace PetShop.Web.Controllers
                 return StatusCode(500, new ApiErrorResult<ApiError>(new ApiError("ServerError", "获取产品信息失败")));
             }
 
-            var productInfo = JsonSerializer.Deserialize<ProductViewModel>(productInfoContent, jsonSerializerOptions);
+            var productInfo = JsonSerializer.Deserialize<ApiResult<ProductViewModel>>(productInfoContent, jsonSerializerOptions).Value;
 
             // 仅适用于演示
             var saleTask = client.PostAsync($"{Configuration["Product"]}/transactions",
@@ -117,7 +117,7 @@ namespace PetShop.Web.Controllers
                     Amount = -productInfo.Price
                 }), Encoding.UTF8, "application/json"));
 
-            Task.WaitAll(saleTask, billTask);
+            Task.WaitAll(saleTask, orderTask, billTask);
 
             var saleResult = await saleTask.Result.Content.ReadAsStringAsync();
             var orderResult = await orderTask.Result.Content.ReadAsStringAsync();
