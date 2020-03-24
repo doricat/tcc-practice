@@ -443,8 +443,8 @@ go
 INSERT INTO ApiResources (Id, Enabled, Name, DisplayName, Description, Created, Updated, LastAccessed, NonEditable) VALUES (1, 1, 'PetShop.Api', 'PetShop.Api', null, '2020-03-09 15:07:41.4854117', null, null, 0);
 INSERT INTO ApiScopes (Id, Name, DisplayName, Description, Required, Emphasize, ShowInDiscoveryDocument, ApiResourceId) VALUES (1, 'PetShop.Api', 'PetShop.Api', null, 0, 0, 1, 1);
 INSERT INTO ClientGrantTypes (Id, GrantType, ClientId) VALUES (2, 'authorization_code', 2);
-INSERT INTO ClientPostLogoutRedirectUris (Id, PostLogoutRedirectUri, ClientId) VALUES (1, 'http://localhost:5002/signout-callback-oidc', 2);
-INSERT INTO ClientRedirectUris (Id, RedirectUri, ClientId) VALUES (1, 'http://localhost:5002/signin-oidc', 2);
+INSERT INTO ClientPostLogoutRedirectUris (Id, PostLogoutRedirectUri, ClientId) VALUES (1, '{signout-callback-url}', 2);
+INSERT INTO ClientRedirectUris (Id, RedirectUri, ClientId) VALUES (1, '{signin-url}', 2);
 INSERT INTO ClientScopes (Id, Scope, ClientId) VALUES (2, 'openid', 2);
 INSERT INTO ClientScopes (Id, Scope, ClientId) VALUES (3, 'profile', 2);
 INSERT INTO ClientScopes (Id, Scope, ClientId) VALUES (4, 'PetShop.Api', 2);
