@@ -59,7 +59,10 @@ namespace Web.Shared
                     await cmd.ExecuteNonQueryAsync(stoppingToken);
                 }
 
-                await conn.WaitAsync(stoppingToken);
+                while (!stoppingToken.IsCancellationRequested)
+                {
+                    await conn.WaitAsync(stoppingToken);
+                }
             }
         }
     }

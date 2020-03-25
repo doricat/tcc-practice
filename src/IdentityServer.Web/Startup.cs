@@ -2,6 +2,7 @@ using IdentityServer.Web.Data;
 using IdentityServer4.Configuration;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
+using Infrastructure;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -70,6 +71,8 @@ namespace IdentityServer.Web
 
             services.AddTransient<IRedirectUriValidator, DemoRedirectValidator>();
             services.AddTransient<ICorsPolicyService, DemoCorsPolicy>();
+            services.AddSingleton(provider => new IdentityGeneratorOptions { InstanceTag = 4 });
+            services.AddSingleton<IdentityGenerator>();
 
             services.AddAuthentication();
             services.AddRazorPages();
